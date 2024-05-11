@@ -17,9 +17,9 @@ class TestCreateCourier:
     @allure.title('Нельзя создать двух одинаковых курьеров')
     def test_create_two_same_couriers(self):
         courier_body = CourierData.generate_courier_data()
-        courier_response = CourierResponses.create_courier(courier_body)
+        CourierResponses.create_courier(courier_body)
         courier_v2_response = CourierResponses.create_courier(courier_body)
-        delete_courier = CourierResponses.delete_courier(courier_body)
+        CourierResponses.delete_courier(courier_body)
 
         assert courier_v2_response.status_code == 409 and courier_v2_response.json()[
             "message"] == Messages.DUPLICATE_COURIER
@@ -47,9 +47,9 @@ class TestCreateCourier:
         courier_body = CourierData.generate_courier_data()
         courier_v2_body = CourierData.generate_courier_data()
         courier_v2_body['login'] = courier_body['login']
-        courier_response = CourierResponses.create_courier(courier_body)
+        CourierResponses.create_courier(courier_body)
         courier_v2_response = CourierResponses.create_courier(courier_v2_body)
-        delete_courier = CourierResponses.delete_courier(courier_body)
+        CourierResponses.delete_courier(courier_body)
 
         assert courier_v2_response.status_code == 409 and courier_v2_response.json()[
             "message"] == Messages.DUPLICATE_COURIER

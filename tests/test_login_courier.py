@@ -14,9 +14,9 @@ class TestLoginCourier:
     @allure.description('Проверяем: курьер может авторизоваться, успешный запрос возвращает id')
     def test_login_courier(self):
         courier_body = CourierData.generate_courier_data()
-        create_courier = CourierResponses.create_courier(courier_body)
+        CourierResponses.create_courier(courier_body)
         login_courier = CourierResponses.login_courier(courier_body)
-        delete_courier = CourierResponses.delete_courier_after_login(courier_body)
+        CourierResponses.delete_courier_after_login(courier_body)
 
         assert login_courier.status_code == 200 and login_courier.json()['id'] is not None
 
@@ -24,11 +24,10 @@ class TestLoginCourier:
     def test_login_courier_without_login(self):
         courier_body = CourierData.generate_courier_data()
         courier_body_org = courier_body.copy()
-        create_courier = CourierResponses.create_courier(courier_body)
+        CourierResponses.create_courier(courier_body)
         courier_body.pop('login')
-        new_courier_body = courier_body
         login_courier = CourierResponses.login_courier(courier_body)
-        delete_courier = CourierResponses.delete_courier(courier_body_org)
+        CourierResponses.delete_courier(courier_body_org)
 
         assert login_courier.status_code == 400 and login_courier.json()[
             'message'] == Messages.LOGIN_WITHOUT_REQUIRED_FIELD
@@ -43,10 +42,10 @@ class TestLoginCourier:
     def test_login_courier_with_incorrect_data(self, field):
         courier_body = CourierData.generate_courier_data()
         courier_body_org = courier_body.copy()
-        create_courier = CourierResponses.create_courier(courier_body)
+        CourierResponses.create_courier(courier_body)
         courier_body[field] = courier_body[field] + 'fake'
         login_courier = CourierResponses.login_courier(courier_body)
-        delete_courier = CourierResponses.delete_courier(courier_body_org)
+        CourierResponses.delete_courier(courier_body_org)
 
         assert login_courier.status_code == 404 and login_courier.json()[
             'message'] == Messages.LOGIN_WITH_INCORRECT_DATA
